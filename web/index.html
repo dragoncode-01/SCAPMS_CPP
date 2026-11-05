@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>SCAPMS · Smart Clinic</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="SCAPMS home">
+        <span class="brand-mark"><span></span><span></span></span>
+        <span><strong>SCAPMS</strong><small>Smart Clinic</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="overview"><span class="nav-icon">⌂</span><span>Overview</span></button>
+        <button class="nav-item" data-page="patients"><span class="nav-icon">◉</span><span>Patients</span><span class="nav-count" id="patientNavCount">0</span></button>
+        <button class="nav-item" data-page="appointments"><span class="nav-icon">▦</span><span>Appointments</span></button>
+        <button class="nav-item" data-page="queue"><span class="nav-icon">≋</span><span>Waiting queue</span><span class="nav-dot"></span></button>
+        <button class="nav-item" data-page="search"><span class="nav-icon">⌕</span><span>Search & sort</span></button>
+        <button class="nav-item" data-page="reports"><span class="nav-icon">▥</span><span>Reports</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-help"><span class="help-badge">i</span><div><strong>Clinic workspace</strong><small>Local data storage</small></div><span class="online-dot"></span></div>
+        <div class="profile"><div class="avatar">AD</div><div class="profile-copy"><strong>Clinic Admin</strong><small>Administrator</small></div><span class="profile-more">···</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark"><span></span><span></span></span><strong>SCAPMS</strong></div>
+        <div class="breadcrumbs"><span>Clinic workspace</span><span class="crumb-slash">/</span><strong id="crumbTitle">Overview</strong></div>
+        <div class="top-actions">
+          <label class="top-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Search patients..." aria-label="Search patients"><kbd>Ctrl F</kbd></label>
+          <span class="top-date" id="topDate"></span>
+          <div class="file-menu-wrap">
+            <button class="icon-button" id="fileMenuButton" title="File actions" aria-label="File actions">⋯</button>
+            <div class="file-menu" id="fileMenu" hidden>
+              <button data-file-action="save"><span>↓</span> Save data <kbd>Ctrl S</kbd></button>
+              <button data-file-action="load"><span>↻</span> Load saved data</button>
+              <button data-file-action="export"><span>⇧</span> Export data file</button>
+              <button data-file-action="import"><span>＋</span> Import data file</button>
+            </div>
+          </div>
+          <button class="avatar top-avatar" title="Clinic administrator">AD</button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <section class="page active" id="page-overview">
+          <div class="page-heading">
+            <div><p class="eyebrow" id="welcomeDate">CLINIC DASHBOARD</p><h1>Good day, Admin <span class="wave">✦</span></h1><p class="subheading">Here’s what’s happening at your clinic today.</p></div>
+            <div class="heading-actions"><button class="button button-soft" id="undoButton" title="Undo the most recent patient or appointment change">↶ <span>Undo last action</span></button><button class="button button-primary" data-open-patient>＋ Add patient</button></div>
+          </div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon icon-blue">♧</span><span class="stat-trend">REGISTERED</span></div><div class="stat-value" id="statPatients">0</div><div class="stat-label">Total patients</div><div class="stat-foot"><span class="foot-dot blue-dot"></span>Across all categories</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon icon-violet">▦</span><span class="stat-trend">ALL TIME</span></div><div class="stat-value" id="statAppointments">0</div><div class="stat-label">Appointments</div><div class="stat-foot"><span class="foot-dot violet-dot"></span><span id="statPending">0</span> scheduled</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon icon-amber">≋</span><span class="live-pill"><i></i> LIVE</span></div><div class="stat-value" id="statWaiting">0</div><div class="stat-label">Waiting for care</div><div class="stat-foot"><span class="foot-dot amber-dot"></span>First in, first to be called</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon icon-rose">＋</span><span class="stat-trend">PRIORITY</span></div><div class="stat-value" id="statEmergency">0</div><div class="stat-label">Emergency patients</div><div class="stat-foot"><span class="foot-dot rose-dot"></span>High-priority records</div></article>
+          </div>
+          <div class="overview-grid">
+            <section class="panel appointments-panel"><div class="panel-heading"><div><h2>Upcoming appointments</h2><p>Your next scheduled consultations</p></div><button class="text-button" data-goto="appointments">View all <span>→</span></button></div><div id="upcomingList" class="upcoming-list"></div></section>
+            <section class="panel quick-panel"><div class="panel-heading"><div><h2>Quick actions</h2><p>Common clinic tasks</p></div><span class="panel-more">···</span></div><div class="quick-actions">
+              <button class="quick-action" data-open-patient><span class="quick-icon quick-blue">＋</span><span><strong>Register patient</strong><small>Create a patient record</small></span><b>↗</b></button>
+              <button class="quick-action" data-goto="appointments"><span class="quick-icon quick-purple">▦</span><span><strong>Book appointment</strong><small>Schedule a consultation</small></span><b>↗</b></button>
+              <button class="quick-action" data-goto="queue"><span class="quick-icon quick-orange">≋</span><span><strong>Manage waiting queue</strong><small>Call the next patient</small></span><b>↗</b></button>
+            </div></section>
+          </div>
+          <section class="panel overview-bottom"><div class="panel-heading"><div><h2>Patient categories</h2><p>Distribution across your clinic</p></div><button class="text-button" data-goto="reports">View report <span>→</span></button></div><div id="categorySummary" class="category-summary"></div></section>
+        </section>
+
+        <section class="page" id="page-patients">
+          <div class="page-heading compact-heading"><div><p class="eyebrow">PATIENT MANAGEMENT</p><h1>Patients</h1><p class="subheading">Register, review and manage patient records.</p></div><div class="heading-actions"><button class="button button-primary" data-open-patient>＋ Add patient</button></div></div>
+          <section class="panel table-panel"><div class="table-toolbar"><div><h2>Patient directory <span class="count-chip" id="patientCountChip">0</span></h2><p>All registered patient records</p></div><div class="toolbar-right"><label class="small-search"><span>⌕</span><input id="patientQuickFilter" type="search" placeholder="Filter directory"></label><button class="button button-outline" data-goto="search">⌕ Advanced search</button></div></div><div class="table-scroll"><table><thead><tr><th>PATIENT</th><th>CATEGORY</th><th>AGE</th><th>CONTACT</th><th>VISITS</th><th>PRIORITY</th><th></th></tr></thead><tbody id="patientsTable"></tbody></table></div><div class="table-footer"><span id="patientFooterCount">Showing 0 patients</span><span>Changes are saved automatically</span></div></section>
+        </section>
+
+        <section class="page" id="page-appointments">
+          <div class="page-heading compact-heading"><div><p class="eyebrow">SCHEDULE & VISITS</p><h1>Appointments</h1><p class="subheading">Plan consultations and follow their progress.</p></div></div>
+          <div class="appointment-layout">
+            <section class="panel schedule-panel"><div class="panel-heading"><div><h2>Schedule appointment</h2><p>Choose a patient and consultation time.</p></div><span class="schedule-mark">▦</span></div><form id="appointmentForm" class="form-grid"><label class="field full-field"><span>Patient <em>*</em></span><select name="patientId" id="appointmentPatient" required><option value="">Select patient</option></select></label><label class="field"><span>Date <em>*</em></span><input type="date" name="date" id="appointmentDate" required></label><label class="field"><span>Time <em>*</em></span><input type="time" name="time" id="appointmentTime" required></label><label class="field full-field"><span>Reason for visit <em>*</em></span><input type="text" name="reason" placeholder="e.g. Routine consultation" maxlength="120" required></label><button class="button button-primary full-field" type="submit">＋ Schedule appointment</button></form></section>
+            <section class="panel schedule-note"><span class="note-icon">i</span><h3>Appointment workflow</h3><p>Scheduled appointments can be marked completed or cancelled. Use the undo action to reverse the latest administrative change.</p><div class="note-line"><span class="status-dot scheduled-dot"></span>Scheduled <span class="status-dot completed-dot"></span> Completed <span class="status-dot cancelled-dot"></span> Cancelled</div></section>
+          </div>
+          <section class="panel table-panel appointment-table-panel"><div class="table-toolbar"><div><h2>All appointments <span class="count-chip" id="appointmentCountChip">0</span></h2><p>Appointment history and status</p></div><label class="small-search"><span>⌕</span><input id="appointmentFilter" type="search" placeholder="Find an appointment"></label></div><div class="table-scroll"><table><thead><tr><th>APPOINTMENT</th><th>PATIENT</th><th>DATE & TIME</th><th>REASON</th><th>STATUS</th><th></th></tr></thead><tbody id="appointmentsTable"></tbody></table></div></section>
+        </section>
+
+        <section class="page" id="page-queue">
+          <div class="page-heading compact-heading"><div><p class="eyebrow">FRONT DESK</p><h1>Waiting queue</h1><p class="subheading">Serve patients in the order they joined.</p></div><button class="button button-primary" id="callNextTop">Call next patient <span>→</span></button></div>
+          <div class="queue-layout"><section class="panel queue-main"><div class="queue-banner"><div><span class="queue-kicker">NOW WAITING</span><h2><span id="queueCount">0</span> patients</h2><p>First in, first to be called</p></div><div class="queue-illustration">≋</div></div><div class="queue-toolbar"><div><h3>Patients in line</h3><p>Queue order is maintained automatically.</p></div><div class="queue-add"><select id="queuePatient"><option value="">Select a patient</option></select><button class="button button-primary" id="addToQueue">Add to queue</button></div></div><div id="queueList" class="queue-list"></div></section><aside class="panel queue-aside"><span class="queue-aside-icon">↗</span><h3>Next patient</h3><div id="nextPatientCard"><div class="empty-mini">No patients are waiting.</div></div><button class="button button-outline button-wide" id="callNextButton">Call next patient</button><p class="muted-note">Calling a patient removes them from the waiting list.</p></aside></div>
+        </section>
+
+        <section class="page" id="page-search">
+          <div class="page-heading compact-heading"><div><p class="eyebrow">FIND & ORGANIZE</p><h1>Search & sort</h1><p class="subheading">Use the right algorithm for the data and task.</p></div></div>
+          <div class="search-sort-grid"><section class="panel search-panel"><div class="panel-heading"><div><h2>Search patient records</h2><p>Choose an algorithm and matching field.</p></div><span class="search-mark">⌕</span></div><form id="searchForm" class="form-grid"><label class="field"><span>Search field</span><select name="field" id="searchField"><option value="id">Patient ID</option><option value="name">Patient name</option><option value="category">Category</option></select></label><label class="field"><span>Algorithm</span><select name="algorithm" id="searchAlgorithm"><option value="linear">Linear search</option><option value="binary" disabled>Binary search</option><option value="recursive" disabled>Recursive search</option></select></label><label class="field full-field"><span>Search value</span><input name="query" id="searchQuery" placeholder="Enter an ID, name or category" required></label><button class="button button-primary full-field" type="submit">⌕ Search records</button></form><div class="algorithm-hint" id="algorithmHint">Linear search checks each record and supports ID, name and category.</div></section>
+            <section class="panel sort-panel"><div class="panel-heading"><div><h2>Sort directory</h2><p>Run a student-implemented sorting algorithm.</p></div><span class="sort-mark">↕</span></div><form id="sortForm" class="form-grid"><label class="field"><span>Sort algorithm</span><select name="algorithm"><option value="selection">Selection sort</option><option value="insertion">Insertion sort</option></select></label><label class="field"><span>Sort records by</span><select name="field"><option value="name">Patient name</option><option value="id">Patient ID</option><option value="age">Age</option><option value="date">Appointment date</option></select></label><button class="button button-dark full-field" type="submit">↕ Sort patient records</button></form><div class="algorithm-hint">Selection sort is easy to trace for small clinic lists. Insertion sort works well when records are nearly in order.</div></section></div>
+          <section class="panel table-panel search-results-panel"><div class="table-toolbar"><div><h2 id="searchResultsTitle">Patient records</h2><p id="searchResultsSubtitle">Run a search to see matching records.</p></div><button class="text-button" id="clearSearch">Clear results <span>×</span></button></div><div class="table-scroll"><table><thead><tr><th>PATIENT</th><th>CATEGORY</th><th>AGE</th><th>CONTACT</th><th>VISITS</th><th>PRIORITY</th><th></th></tr></thead><tbody id="searchResults"></tbody></table></div></section>
+        </section>
+
+        <section class="page" id="page-reports">
+          <div class="page-heading compact-heading"><div><p class="eyebrow">CLINIC INSIGHTS</p><h1>Reports</h1><p class="subheading">A clear view of activity, follow-ups and patient mix.</p></div><button class="button button-outline" id="refreshReports">↻ Refresh reports</button></div>
+          <div class="reports-grid"><section class="panel report-card"><div class="panel-heading"><div><h2>Category distribution</h2><p>Registered patient mix</p></div><span class="report-icon report-blue">◉</span></div><div id="categoryReport" class="category-report"></div></section><section class="panel report-card"><div class="panel-heading"><div><h2>Daily appointment summary</h2><p id="reportDate">Today</p></div><span class="report-icon report-purple">▦</span></div><div id="dailyReport" class="daily-report"></div></section><section class="panel report-card wide-report"><div class="panel-heading"><div><h2>Most frequently attended</h2><p>Patients with the most completed visits</p></div><span class="report-icon report-amber">↗</span></div><div id="frequentReport" class="report-list"></div></section><section class="panel report-card wide-report"><div class="panel-heading"><div><h2>Pending appointments</h2><p>Scheduled consultations that still need attention</p></div><span class="report-icon report-rose">◷</span></div><div id="pendingReport" class="report-list"></div></section></div>
+        </section>
+
+        <footer class="page-footer"><span>SCAPMS <span class="footer-dot">·</span> Smart Clinic Appointment & Patient Management System</span><span id="saveStatus">All changes saved <i class="save-check">✓</i></span></footer>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="patientModal" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="patientModalTitle"><div class="modal-head"><div><p class="eyebrow">PATIENT RECORD</p><h2 id="patientModalTitle">Register patient</h2></div><button class="icon-button modal-close" data-close-modal aria-label="Close">×</button></div><form id="patientForm"><input type="hidden" name="id"><div class="form-grid"><label class="field full-field"><span>Patient name <em>*</em></span><input name="name" placeholder="Enter full name" maxlength="80" required></label><label class="field"><span>Patient category <em>*</em></span><select name="type" id="patientType"><option>General</option><option>Emergency</option><option>Follow-Up</option></select></label><label class="field"><span>Age <em>*</em></span><input name="age" type="number" min="0" max="120" placeholder="0–120" required></label><label class="field full-field"><span>Contact information <em>*</em></span><input name="contact" placeholder="Phone number or email" maxlength="80" required></label><label class="field full-field"><span id="notesLabel">Clinical notes</span><textarea name="notes" id="patientNotes" rows="3" maxlength="500" placeholder="Relevant patient information"></textarea><small class="field-hint" id="typeHint">Standard consultation · Normal priority</small></label></div><div class="modal-actions"><button type="button" class="button button-outline" data-close-modal>Cancel</button><button type="submit" class="button button-primary" id="patientSubmit">Save patient</button></div></form></section></div>
+  <input type="file" id="importFile" accept=".tsv,.txt,text/plain" hidden>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

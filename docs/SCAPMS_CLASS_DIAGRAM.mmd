@@ -1,0 +1,47 @@
+classDiagram
+    class Appointable {
+      <<interface>>
+      +scheduleAppointment(appointment)
+      +cancelAppointment(id)
+      +removeAppointment(id)
+    }
+    class PatientRecord {
+      <<abstract>>
+      -id
+      -name
+      -age
+      -contact
+      -appointments
+      +type()
+      +priorityLabel()
+      +careInstructions()
+    }
+    class GeneralPatient
+    class EmergencyPatient
+    class FollowUpPatient
+    class Appointment {
+      +id
+      +patientId
+      +dateTime
+      +reason
+      +status
+    }
+    class ClinicDatabase {
+      -patients: vector~unique_ptr~PatientRecord~~
+      -waitingQueue: queue~string~
+      -undoStack: stack~UndoAction~
+      -recentPatients: array~PatientRecord*,10~
+    }
+    class ClinicManager
+    class SearchEngine
+    class AppointmentController
+
+    Appointable <|.. PatientRecord
+    PatientRecord <|-- GeneralPatient
+    PatientRecord <|-- EmergencyPatient
+    PatientRecord <|-- FollowUpPatient
+    PatientRecord "1" *-- "0..*" Appointment : owns appointment history
+    ClinicManager --> ClinicDatabase : manages
+    ClinicManager --> AppointmentController : delegates scheduling
+    SearchEngine ..> PatientRecord : searches polymorphically
+    ClinicDatabase "1" o-- "0..*" PatientRecord : stores
